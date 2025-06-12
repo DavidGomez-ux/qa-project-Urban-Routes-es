@@ -22,4 +22,4 @@ Antes de empezar, asegúrate de tener:
 	•	Git instalado para la gestión del repositorio
 	•	Los paquetes necesarios para automatización (Selenium y Requests)
 	•	El repositorio clonado localmente
-	•	ChromeDriver instalado para controlar el navegador
+	•	ChromeDriver instalado para controlar el navegador 
