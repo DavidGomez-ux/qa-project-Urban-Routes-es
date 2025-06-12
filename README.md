@@ -23,3 +23,29 @@ Antes de empezar, asegúrate de tener:
 	•	Los paquetes necesarios para automatización (Selenium y Requests)
 	•	El repositorio clonado localmente
 	•	ChromeDriver instalado para controlar el navegador 
+ ### Que contiene el proyecto
+ Este archivo contiene las pruebas automatizadas principales que validan el flujo completo de la plataforma Urban Routes. A través de estas pruebas se comprueba el correcto funcionamiento del proceso para pedir un taxi, desde el inicio hasta la solicitud final.
+
+Funcionalidades automatizadas:
+	•	Seleccionar origen y destino para una ruta.
+	•	Elegir la tarifa (por ejemplo, tarifa confort).
+	•	Registrar un número de teléfono y validar su confirmación.
+	•	Agregar un método de pago con tarjeta.
+	•	Escribir un mensaje al conductor.
+	•	Solicitar servicios adicionales, como:
+	•	Mantas y pañuelos.
+	•	Helados.
+	•	Buscar un taxi disponible y confirmar que el proceso esté visible en pantalla.
+
+Estas pruebas aseguran que el flujo del usuario funcione correctamente y sin errores, simulando la interacción real con la aplicación desde el navegador.
+### Data,Py
+Este archivo contiene todos los datos de prueba y configuraciones base necesarios para la ejecución de los test automatizados del proyecto Urban Routes.
+
+Contenido principal:
+	•	Direcciones de origen y destino utilizadas en las pruebas.
+	•	Número de teléfono simulado para pruebas de autenticación.
+	•	Datos de tarjeta de crédito, como número y código de seguridad.
+	•	Mensajes personalizados para el conductor.
+	•	URL del servidor de pruebas donde corre la aplicación Urban Routes.
+
+Este archivo centraliza los datos usados en las pruebas, permitiendo mantener el código limpio y facilitar cambios sin tener que modificar múltiples archivos.
