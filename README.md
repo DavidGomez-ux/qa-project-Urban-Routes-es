@@ -49,3 +49,23 @@ Contenido principal:
 	•	URL del servidor de pruebas donde corre la aplicación Urban Routes.
 
 Este archivo centraliza los datos usados en las pruebas, permitiendo mantener el código limpio y facilitar cambios sin tener que modificar múltiples archivos.
+### Instrucciones para hacer ejecutar las pruebas automatizadas.
+Cómo ejecutar las pruebas:
+	•	Para correr todas las pruebas: usar el comando pytest.
+	•	Para ejecutar una prueba específica: usar pytest nombre_del_archivo.py.
+	•	Para ver un reporte más detallado: usar pytest -v.
+
+Casos de prueba incluidos:
+	•	Ingreso de direcciones
+	•	Selección de tarifa y modo personal
+	•	Confirmación de número telefónico
+	•	Agregado de método de pago
+	•	Selección de manta, pañuelos y helados
+	•	Envío de mensaje al conductor
+	•	Confirmación del estado “buscando” al solicitar taxi
+
+Notas adicionales:
+	•	Las pruebas requieren conexión a internet.
+	•	Algunas validaciones como el código telefónico se simulan por medio de funciones auxiliares.
+	•	Se recomienda usar el navegador Google Chrome actualizado.
+ * NOMBRE EDUARDO DAVID GOMEZ MIRANDA//COHORTE NUMERO 29
