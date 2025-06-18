@@ -1,4 +1,4 @@
-from codigo import retrieve_phone_code
+from helpers import retrieve_phone_code
 import data
 from selenium import webdriver
 from selenium.webdriver import Keys
@@ -15,6 +15,7 @@ class UrbanRoutesPage:
     modo_personal = (By.XPATH, '//div[@class = "mode" and contains(text(),"Personal")]')
     boton_pedir_taxi = (By.XPATH, "//button[@class='button round' and text()='Pedir un taxi']")
     tarifa_confort = (By.XPATH, '//div[text() = "10"]')
+    verificar_confort = (By.XPATH, '//div[@class= "r-sw-label" and contains(text(), "Manta y pañuelos")]')
     boton_agregar_numero = (By.XPATH, '//div[@class="np-button"]')  # Botón para iniciar ingreso de número
     texto_agregar_numero = (By.XPATH, '//div[@class="np-text"]')
     campo_numero_input = (By.XPATH, '//div[@class="np-input"]/div')
@@ -22,6 +23,7 @@ class UrbanRoutesPage:
     boton_enviar_numero = (By.CLASS_NAME, "button.full")
     campo_codigo_telefono = (By.ID, 'code')
     boton_confirmar_codigo = (By.CSS_SELECTOR, '.section.active>form>.buttons>:nth-child(1)')
+    verificar_texto_tarjeta = (By.CLASS_NAME, 'pp-value-text')
     boton_agregar_metodo_pago = (By.XPATH, '//div[contains(@class,"pp-text")]/..')
     seleccionar_pago_con_tarjeta = (By.XPATH, '//img[contains(@class,"pp-plus")]')
     campo_numero_tarjeta = (By.XPATH, '//input[contains(@id,"number")]')
@@ -30,7 +32,9 @@ class UrbanRoutesPage:
     boton_agregar_tarjeta = (By.XPATH, '//div[@class="pp-buttons"]/button[@type="submit"]')
     boton_cerrar_metodos_pago = (By.XPATH, '(//button[@class="close-button section-close"])[3]')
     campo_mensaje = (By.XPATH, '//input[@name="comment"]')
+    verificar_manta_y_pañuelos = (By.XPATH, '(//span[@class="slider round"])[1]/..')
     boton_manta_y_pañuelos = (By.XPATH, '(//span[@class="slider round"])[1]')
+    casilla_helados = (By.XPATH, '(//div[@class="counter-value"])[1]')
     boton_helados = (By.XPATH, '(//div[@class="counter-plus"])[1]')
     verificar_boton_final = (By.XPATH, '//span[@class= "smart-button-main" and contains(text(), "Pedir un taxi")]')
     contador_taxi = (By.CLASS_NAME, "order-btn-group")
@@ -82,6 +86,10 @@ class UrbanRoutesPage:
     def seleccionar_la_tarifa_confort(self):
         elemento = self.wait_for_element(self.tarifa_confort)
         elemento.click()
+
+    # Verificamos el texto confort
+    def verificar_tarifa_confort(self):
+        return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.verificar_confort)).text
 
     def set_tarifa_comfort(self):
         self.clic_boton_para_personal()
@@ -171,6 +179,8 @@ class UrbanRoutesPage:
         clic_boton_cerrar = WebDriverWait(self.driver, 15).until(EC.element_to_be_clickable(self.boton_cerrar_metodos_pago))
         clic_boton_cerrar.click()
 
+    def verificar_texto_campo_metodo_de_pago(self):
+        return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.verificar_texto_tarjeta)).text
     '''
     Para ingresar la tarjeta como medio de pago, hacemos:
     1. clic el campo método de pago
@@ -193,12 +203,19 @@ class UrbanRoutesPage:
 
 
     # Enviar mensaje al conductor
-    def escribir_mensaje_conductor(self, message_for_driver):
-        self.driver.find_element(*self.campo_mensaje).send_keys(message_for_driver)
+    def mensaje_para_el_conductor(self, message_for_driver):
+        mensaje_conductor = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(self.campo_mensaje))
+        mensaje_conductor.send_keys(message_for_driver)
+    
+    # Definimos el metodo para obtener el mensaje al conductor
+    def verificar_mensaje(self):
+        return self.driver.find_element(*self.campo_mensaje).get_property('value')
 
+    
     # Solicitar manta y pañuelos
     def solicitar_manta_y_pañuelos(self):
-        self.driver.find_element(*self.boton_manta_y_pañuelos).click()
+        activar_boton_manta_y_pañuelos = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.boton_manta_y_pañuelos))
+        activar_boton_manta_y_pañuelos.click()
 
     # Solicitar helados
     def solicitar_helados(self):
@@ -207,7 +224,7 @@ class UrbanRoutesPage:
 
     # Definimos el metodo para dar clic en el botón final de pedir un taxi
 
-    def check_boton_pedir_taxi_enabler(self):
+    def check_boton_pedir_taxi_enabled(self):
         return WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(self.verificar_boton_final)).is_enabled()
 
         # Definimos el metodo para dar clic en el botón final de pedir un taxi
@@ -219,4 +236,4 @@ class UrbanRoutesPage:
         # Definimos un metodo conocer si el contador del taxi está visible
 
     def check_espera_contador(self):
-        return WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located(self.contador_taxi)).is_displayed()
+        return WebDriverWait(self.driver, 50).until(EC.visibility_of_element_located(self.contador_taxi)).is_displayed()

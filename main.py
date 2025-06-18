@@ -27,6 +27,7 @@ class TestUrbanRoutes:
 
     def test_seleccionar_tarifa_confort(self): # Seleccionamos la tarifa confort.
         self.urban.set_tarifa_comfort()
+        assert "Manta y pañuelos" in self.urban.verificar_tarifa_confort()
 
     def test_ingresar_numero_telefono(self):
         pagina = UrbanRoutesPage(self.driver)
@@ -38,25 +39,31 @@ class TestUrbanRoutes:
         self.urban.set_seleccionar_metodo_de_pago_tarjeta(data.card_number,data.card_code)  # Agregamos tarjeta como medio de pago con su número y código.
         assert self.urban.numero_de_la_tarjeta() == data.card_number
         assert self.urban.codigo_de_la_tarjeta() == data.card_code
+        assert self.urban.verificar_texto_campo_metodo_de_pago() == "Tarjeta", "No se agrego metodo de pago"
 
     def test_escribir_mensaje_conductor(self):
-        pagina = UrbanRoutesPage(self.driver)
-        pagina.escribir_mensaje_conductor(data.message_for_driver)
+        self.urban.mensaje_para_el_conductor(data.message_for_driver)
+        assert self.urban.verificar_mensaje() == data.message_for_driver
 
     def test_solicitar_manta_y_pañuelos(self):
         self.urban.solicitar_manta_y_pañuelos() #Activamos la casilla verificación, manta y pañuelo.
+        assert "switch" in self.driver.find_element(*self.urban.verificar_manta_y_pañuelos).get_attribute("class")
 
     def test_solicitar_helados(self):
         self.urban.solicitar_helados() # Solicitamos un par de helados.
         self.urban.solicitar_helados() # Se hace doble click.
 
+        casilla = self.driver.find_element(*self.urban.casilla_helados).text
+        assert casilla == "2", f"Se solicitaron 2 helados, pero aparecen {casilla} en la casilla"
+
     def test_buscar_taxi(self):
-        assert self.urban.check_boton_pedir_taxi_enabler() == True, "El botón pedir taxi no esta activado"  # Verificamos que el botón pedir un taxi está activado.
+        assert self.urban.check_boton_pedir_taxi_enabled() == True, "El botón pedir taxi no esta activado"  # Verificamos que el botón pedir un taxi está activado.
         self.urban.clic_boton_final_pedir_un_taxi()  # Clic en pedir un taxi a final del formulario
         assert self.urban.check_espera_contador() == True, "El contador no muestra la solicitud del taxi"  # Espera el tiempo necesario para verificar que se asignó un conductor al servicio.
 
     @classmethod
     def teardown_class(cls):
         cls.driver.quit()
+
 
 
